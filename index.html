@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Surprise 💖</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive;
+      text-align: center;
+      background: linear-gradient(#ffe6f0, #ffd6eb);
+      overflow: hidden;
+    }
+
+    .page {
+      display: none;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    .active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      background: #ff66b2;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .teddy-img { width: 140px; margin-bottom: 10px; }
+
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      width: 300px;
+    }
+
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .tile {
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 12px;
+      font-size: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .hidden {
+      background: #ff99cc;
+      color: transparent;
+    }
+
+    .bouquet-img {
+      width: 250px;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .love-note {
+      background: #fffaf0;
+      padding: 25px;
+      width: 350px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      text-align: left;
+      line-height: 1.7;
+      font-family: 'Brush Script MT', cursive;
+      font-size: 18px;
+      border: 2px dashed #ff99cc;
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      font-size: 24px;
+      opacity: 0;
+      animation: fadePopup 4s forwards;
+    }
+
+    @keyframes fadePopup {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -10px;
+      animation: confettiFall 3s linear forwards;
+    }
+
+    @keyframes confettiFall {
+      to { transform: translateY(110vh) rotate(360deg); }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- PAGE 1 -->
+  <div id="page1" class="page active">
+    <!-- SAVE YOUR GIF AS teddy.gif -->
+    <img src="teddy.gif" class="teddy-img">
+    <div class="box">
+      <h1>HAII MY LOVEYY 💕</h1>
+      <h2>I HAVE A SURPRISE FOR U</h2>
+      <button onclick="goToPage(2)">CLICK ME</button>
+    </div>
+  </div>
+
+  <!-- PAGE 2 (GAME) -->
+  <div id="page2" class="page">
+    <h2>Match all tiles to unlock 💌</h2>
+    <div class="tiles" id="tiles"></div>
+  </div>
+
+  <!-- PAGE 3 (BOUQUET) -->
+  <div id="page3" class="page">
+    <img src="bouquet.png" class="bouquet-img">
+    <h2>This is for you 💐</h2>
+    <button onclick="goToPage(4)">Next 💌</button>
+  </div>
+
+  <!-- PAGE 4 (LETTER) -->
+  <div id="page4" class="page">
+    <div class="love-note">
+      <p>
+        my dear baby,<br><br>
+        I know ur going thru alot and it must feel so cramped and suffocating but i wunt u to know i love you thru all of it and im ready to go thru all of it together as wife and husband bc zats wut being a couple means. im always and forever will be here for u caring for u for za rest of my life.<br><br>
+        forever urs,<br>
+        meeee.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function goToPage(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page' + page).classList.add('active');
+
+      if (page === 4) showFinal();
+    }
+
+    function showFinal() {
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      popup.innerText = 'I LOVE YOU 💖';
+      document.body.appendChild(popup);
+
+      for (let i = 0; i < 50; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = `hsl(${Math.random()*360},100%,75%)`;
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 3000);
+      }
+
+      setTimeout(() => popup.remove(), 4000);
+    }
+
+    // MEMORY GAME
+    const emojis = ['💖','💖','🌸','🌸','🧸','🧸','💌','💌','🌹','🌹','💘','💘','🎀','🎀','✨','✨'];
+    let shuffled = emojis.sort(() => 0.5 - Math.random());
+
+    const tilesContainer = document.getElementById('tiles');
+    let selected = [];
+    let matched = 0;
+
+    shuffled.forEach((emoji) => {
+      const tile = document.createElement('div');
+      tile.classList.add('tile','hidden');
+      tile.dataset.value = emoji;
+      tile.innerText = emoji;
+
+      tile.addEventListener('click', () => {
+        if (selected.length < 2 && tile.classList.contains('hidden')) {
+          tile.classList.remove('hidden');
+          selected.push(tile);
+
+          if (selected.length === 2) {
+            setTimeout(() => {
+              if (selected[0].dataset.value === selected[1].dataset.value) {
+                matched += 2;
+                if (matched === emojis.length) {
+                  goToPage(3);
+                }
+              } else {
+                selected.forEach(t => t.classList.add('hidden'));
+              }
+              selected = [];
+            }, 600);
+          }
+        }
+      });
+
+      tilesContainer.appendChild(tile);
+    });
+  </script>
+
+</body>
+</html>
